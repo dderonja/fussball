@@ -1,0 +1,96 @@
+.App {
+  text-align: center;
+
+
+
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.progress-bar1 {
+  margin: auto;
+  position: relative;
+  height: 100px;
+  width: 1200px;
+  border: 1px solid #333;
+
+  background-color: white;
+}
+
+.filler1 {
+  position: absolute;
+  top: 0px;
+  height: 100%;
+  border-radius: inherit;
+  opacity: 0.5;
+  background: aqua;
+}
+
+.hintText {
+
+  font-weight: bold;
+  line-height: 100px;
+
+
+}
+
+
+
+.example-enter {
+  opacity: 0.01;
+}
+
+.example-enter.example-enter-active {
+  opacity: 1;
+  transition: opacity 1s ease-in;
+}
+
+.example-leave {
+
+}
+
+.example-leave.example-leave-active {
+
+}
+
+.example-appear {
+  opacity: 0.01;
+}
+
+.example-appear.example-appear-active {
+  opacity: 1;
+  transition: opacity 1s ease-in;
+}
+
+.timer{
+  font-size: 200px;
+  color: firebrick;
+  font-weight: bold;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+  line-height: 700px;
+
+}
