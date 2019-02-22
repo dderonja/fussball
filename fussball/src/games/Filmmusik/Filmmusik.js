@@ -18,7 +18,10 @@ import mamma_mia from "./mamma_mia.mp3"
 import mulan from "./mulan.mp3"
 import saturday_night from "./saturday_night.mp3"
 import transformers from "./transformers.mp3"
+import chihiro from "./chihiro.mp3"
+import intro from "./intro13.mp4"
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import ReactPlayer from 'react-player'
 
 import Sound from 'react-sound';
 
@@ -59,12 +62,12 @@ class Filmmusik extends React.Component {
 
         this.state = {
             playerList: this.props.playerList1,
-            roundList: [{name: "Kill Bill", file: kill_bill, position: 0, volume1: 70}, {name: "Batman", file: batman, position: 300000, volume1: 70}, {name: "Mulan", file: mulan, position: 0, volume1: 100},
-                {name: "Saturday Night Fever", file: saturday_night, position: 0, volume1: 100}, {name: "Inception", file: inception, position: 120000, volume1: 100},
-                {name: "Ziemlich beste Freunde", file: beste_freunde, position: 110000, volume1: 90}, {name: "Jurassic Park", file: jurassic_park, position: 195000, volume1: 80},
-                {name: "Harry Potter", file: harry_potter, position: 95000, volume1: 100}, {name: "König der Löwen", file: lion_king, position: 154000, volume1: 60},
-                {name: "Mamma Mia", file: mamma_mia, position: 7000, volume1: 90}, {name: "Drive", file: drive, position: 0, volume1: 50}, {name: "Forrest Gump", file: forrest_gump, position: 42000, volume1: 90},
-                {name: "Avatar", file: avatar, position: 40000, volume1: 100}, {name: "Transformers", file: transformers, position: 248000, volume1: 70}],
+            roundList: [{name: "Kill Bill", file: kill_bill, position: 0, volume1: 70}, {name: "Batman", file: batman, position: 0, volume1: 70}, {name: "Mulan", file: mulan, position: 0, volume1: 100},
+                {name: "Saturday Night Fever", file: saturday_night, position: 0, volume1: 100}, {name: "Chihiros Reise ins Zauberland", file: chihiro},
+                {name: "Ziemlich beste Freunde", file: beste_freunde, position: 0, volume1: 90}, {name: "Jurassic Park", file: jurassic_park, position: 0, volume1: 80},
+                {name: "Harry Potter", file: harry_potter, position: 95000, volume1: 100}, {name: "König der Löwen", file: lion_king, position: 68000, volume1: 60},
+                {name: "Mamma Mia", file: mamma_mia, position: 7000, volume1: 90}, {name: "Drive", file: drive, position: 0, volume1: 50}, {name: "Forrest Gump", file: forrest_gump, position: 0, volume1: 90},
+                {name: "Avatar", file: avatar, position: 0, volume1: 100}, {name: "Transformers", file: transformers, position: 0, volume1: 70}],
             time: {},
             seconds: 5,
             buzzingPlayer: 0,
@@ -278,9 +281,11 @@ class Filmmusik extends React.Component {
 
     renderImage(){
 
-        //<img key={this.state.currentRound} src={this.state.roundList[this.state.currentRound].image}></img>
-
-        if(!this.state.showPoints) {
+        if(this.state.currentRound === -1){
+            return(
+                <ReactPlayer volume="0.1" height="720px" width="1080" style={{marginTop: 50}} url={intro} playing />
+            )
+        }else if(!this.state.showPoints) {
             return (
 
                 <ReactCSSTransitionGroup
@@ -292,7 +297,7 @@ class Filmmusik extends React.Component {
                     transitionLeaveTimeout={1}>
 
 
-                    <img src={start} style={{border: '10px solid #222'}}/>
+
 
 
                 </ReactCSSTransitionGroup>
@@ -341,24 +346,25 @@ class Filmmusik extends React.Component {
 
             var currRound = (this.state.currentRound) + 1;
 
-
-            this.setState({
-                currentRound: currRound,
-                testWord: "JETZT BUZZERN",
-                buzzingActive: true,
-                buttonLabel: "CHECK",
-                showPoints: false,
-                playStatus: Sound.status.PLAYING,
-                mp3File: this.state.roundList[currRound].file,
-                position: this.state.roundList[currRound].position,
-                volume1: this.state.roundList[currRound].volume1
+            if(currRound === 14){
+                this.props.handleEnd(this.state.points);
+            }else {
 
 
+                this.setState({
+                    currentRound: currRound,
+                    testWord: "JETZT BUZZERN",
+                    buzzingActive: true,
+                    buttonLabel: "CHECK",
+                    showPoints: false,
+                    playStatus: Sound.status.PLAYING,
+                    mp3File: this.state.roundList[currRound].file,
+                    position: this.state.roundList[currRound].position,
+                    volume1: this.state.roundList[currRound].volume1
 
 
-
-
-            })
+                })
+            }
         }else if(this.state.buttonLabel==='CHECK'){
             this.setState({
                 testWord: this.state.roundList[this.state.currentRound].name,

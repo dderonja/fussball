@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-
+import ReactPlayer from 'react-player';
+import intro from './intro5.mp4';
 import start from "./start.jpg"
 import alfredj from "./alfredj.mp3"
 import comedystreet from "./comedystreet.mp3"
@@ -16,7 +17,11 @@ import nils from "./nilsholgersson.mp3"
 import texavery from "./texavery.mp3"
 import endSound from "./end-sound.mp3"
 import timer from "./timer.mp3"
+import familienduell from "./familienduell.mp3"
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import doug from "./doug.mp3"
+import powerpuff from "./powerpuff.mp3"
+import wissen from "./wissen.mp3"
 
 import Sound from 'react-sound';
 
@@ -58,11 +63,12 @@ class IntrosRaten extends React.Component {
         this.state = {
             playerList: this.props.playerList1,
             roundList: [{name: "Comedy Street", file: comedystreet, position: 15000, volume1: 50},{name: "Gefragt Gejagt", file: gefragtgejagt, position: 0, volume1: 50},
-                {name: "Nils Holgersson", file: nils, position: 0, volume1: 50},{name: "Stranger Things", file: strangerthings, position: 0, volume1: 80},
+                {name: "Nils Holgersson", file: nils, position: 0, volume1: 50},{name: "Stranger Things", file: strangerthings, position: 0, volume1: 100},
                 {name: "Pfefferkörner", file: pfefferkoerner, position: 0, volume1: 50},{name: "MTV Home", file: mtvhome, position: 0, volume1: 50},
-                {name: "Tex Avery Show", file: texavery, position: 0, volume1: 50},{name: "Alfred J. Quack", file: alfredj, position: 0, volume1: 70},
-                {name: "King of Queens", file: kingofqueens, position: 0, volume1: 50},{name: "Dragonball", file: dragonball, position: 0, volume1: 30},
-                {name: "Hotel Zack and Cody", file: hotelzackandcody, position: 0, volume1: 70},{name: "Sons of Anarchy", file: sonsofanarchy, position: 0, volume1: 30}],
+                {name: "Familienduell", file: familienduell, position: 0, volume1: 50},{name: "Alfred J. Quack", file: alfredj, position: 0, volume1: 70},
+                {name: "King of Queens", file: kingofqueens, position: 0, volume1: 50},{name: "Dragonball", file: dragonball, position: 0, volume1: 50},
+                {name: "Hotel Zack and Cody", file: hotelzackandcody, position: 0, volume1: 50},{name: "Sons of Anarchy", file: sonsofanarchy, position: 0, volume1: 50},
+                {name: "Doug", file: doug, position: 0, volume1: 80}, {name: "Wissen macht Ah", file: wissen, position: 0, volume1: 80}, {name: "Powerpuff Girls", file: powerpuff, position: 0, volume1: 80}],
             time: {},
             seconds: 5,
             buzzingPlayer: 0,
@@ -278,22 +284,14 @@ class IntrosRaten extends React.Component {
 
         //<img key={this.state.currentRound} src={this.state.roundList[this.state.currentRound].image}></img>
 
-        if(!this.state.showPoints) {
+        if(this.state.currentRound === -1){
+            return (
+            <ReactPlayer height="720px" width="1080" style={{marginTop: 50}} url={intro} playing />
+            )
+        }else if(!this.state.showPoints) {
             return (
 
-                <ReactCSSTransitionGroup
-                    transitionName="example"
-                    transitionAppear={true}
-                    transitionLeave={false}
-                    transitionAppearTimeout={2000}
-                    transitionEnterTimeout={2000}
-                    transitionLeaveTimeout={1}>
-
-
-                    <img src={start} style={{border: '10px solid #222'}}/>
-
-
-                </ReactCSSTransitionGroup>
+                <div/>
 
 
             )
@@ -338,25 +336,25 @@ class IntrosRaten extends React.Component {
         if(this.state.buttonLabel === 'START') {
 
             var currRound = (this.state.currentRound) + 1;
+            if(currRound === 15){
+                this.props.handleEnd(this.state.points);
+            }else {
 
 
-            this.setState({
-                currentRound: currRound,
-                testWord: "JETZT BUZZERN",
-                buzzingActive: true,
-                buttonLabel: "CHECK",
-                showPoints: false,
-                playStatus: Sound.status.PLAYING,
-                mp3File: this.state.roundList[currRound].file,
-                position: this.state.roundList[currRound].position,
-                volume1: this.state.roundList[currRound].volume1
+                this.setState({
+                    currentRound: currRound,
+                    testWord: "JETZT BUZZERN",
+                    buzzingActive: true,
+                    buttonLabel: "CHECK",
+                    showPoints: false,
+                    playStatus: Sound.status.PLAYING,
+                    mp3File: this.state.roundList[currRound].file,
+                    position: this.state.roundList[currRound].position,
+                    volume1: this.state.roundList[currRound].volume1
 
 
-
-
-
-
-            })
+                })
+            }
         }else if(this.state.buttonLabel==='CHECK'){
             this.setState({
                 testWord: this.state.roundList[this.state.currentRound].name,

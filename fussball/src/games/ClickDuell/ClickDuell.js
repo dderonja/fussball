@@ -17,6 +17,8 @@ import fsk18 from "./fsk18.png"
 import weather from "./weather.png"
 import '../../App.css';
 import start from "./start.jpg"
+import intro from "./intro4.mp4"
+import ReactPlayer from 'react-player';
 import {
     Row,
     Col,
@@ -187,18 +189,22 @@ class ClickDuell extends Component {
         if(this.state.buttonLabel === 'START') {
             this.newpic.play();
             var currRound = (this.state.currentRound) + 1;
-            if(currRound===1){
-                this.backgroundMusic.play();
+            if(currRound === 8){
+                this.props.handleEnd(this.state.points)
+            }else {
+                if (currRound === 1) {
+                    this.backgroundMusic.play();
+                }
+
+                this.setState({
+                    currentRound: currRound,
+                    testWord: this.state.roundList[this.state.currentRound].question,
+                    buttonLabel: "CHECK",
+                    showPoints: false,
+                    buzzingActive: true
+
+                })
             }
-
-            this.setState({
-                currentRound: currRound,
-                testWord: this.state.roundList[this.state.currentRound].question,
-                buttonLabel: "CHECK",
-                showPoints: false,
-                buzzingActive: true
-
-            })
         }else if(this.state.buttonLabel==='CHECK'){
             this.setState({
                 buttonLabel: 'SHOW ANSWER',
@@ -269,20 +275,7 @@ class ClickDuell extends Component {
     renderImage() {
         if (this.state.currentRound === 0) {
             return (
-                <ReactCSSTransitionGroup
-                    transitionName="example"
-                    transitionAppear={true}
-                    transitionLeave={false}
-                    transitionAppearTimeout={2000}
-                    transitionEnterTimeout={2000}
-                    transitionLeaveTimeout={1}>
-                    <div key={this.state.currentRound}>
-
-                        <img src={start} style={{border: '3px solid #222'}}></img>
-                    </div>
-
-
-                </ReactCSSTransitionGroup>
+                <ReactPlayer height="720px" width="1080" style={{marginTop: 50}} url={intro} playing />
             )
         } else {
 
@@ -469,13 +462,6 @@ class ClickDuell extends Component {
                             <Button style={{height: 100, width: 250, fontSize: 30, marginLeft: 20, backgroundColor: `${this.state.rightButtonColor}`}} onClick={() => this.nextRound()}>{this.state.buttonLabel}</Button>
                         </Col>
                     </Row>
-
-
-
-
-
-
-
 
 
 

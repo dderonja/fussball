@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import start from "./start.jpg"
 import backgroundMusic from "./backgroundMusic3.mp3"
 import buzzer from "./buzzer.mp3"
+import intro from "./intro2.mp4"
+import ReactPlayer from 'react-player'
 
 import '../../App.css';
 import {
@@ -41,16 +42,16 @@ class WerLuegt extends Component {
 
         this.state = {
             roundList: [
-                {statement: "Ich gehöre zu den antiken oder modernen Weltwundern",
+                {statement: "Ich bin ein Teil des menschlichen Körpers",
                     options: [
-                        {name: "Der Koloss von Rhodos", boolean: true},
-                        {name: "Die Hängenden Gärten von Babylon", boolean: true},
-                        {name: "Das Kolosseum in Rom", boolean: true},
-                        {name: "Die Chinesische Mauer", boolean: true},
-                        {name: "Der Eiffelturm in Paris", boolean: false},
-                        {name: "Die Pyramiden von Gizeh", boolean: true},
-                        {name: "Das Brandenburger Tor in Berlin", boolean: false},
-                        {name: "Allianz Arena in München", boolean: false}
+                        {name: "Thorax", boolean: true},
+                        {name: "Aorta", boolean: true},
+                        {name: "Cordale", boolean: false},
+                        {name: "Langerhanssche Inseln", boolean: true},
+                        {name: "Epidermis", boolean: true},
+                        {name: "Parzen", boolean: false},
+                        {name: "Pankreas", boolean: true},
+                        {name: "Uster", boolean: false}
                     ]
                 },
                 {statement: "Ich bin eine Erweiterung von World of Warcraft",
@@ -65,7 +66,7 @@ class WerLuegt extends Component {
                         {name: "The Nightelfs", boolean: false}
                     ]
                 },
-                {statement: "Ich bin/war Spiel des Jahres",
+                {statement: "Ich bin Spiel des Jahres",
                     options: [
                         {name: "Scotland Yard", boolean: true},
                         {name: "Die Siedler von Catan", boolean: true},
@@ -79,14 +80,14 @@ class WerLuegt extends Component {
                 },
                 {statement: "Ich habe über 500 Kalorien",
                     options: [
-                        {name: "1 Big Tasty Bacon (McDonalds)", boolean: true},
-                        {name: "3 Coleslaw Salate (KFC)", boolean: true},
-                        {name: "1 Double Steakhouse", boolean: true},
-                        {name: "1 Mc Flurry mit LION-Karamell (McDonalds)", boolean: false},
-                        {name: "2 Apfeltaschen (McDonalds)", boolean: false},
-                        {name: "1 Crispy Chicken (Burger King)", boolean: true},
-                        {name: "9 Hot Wings (KFC)", boolean: true},
-                        {name: "1 Chili Cheese Burger", boolean: false}
+                        {name: "100 Gramm Walnüsse", boolean: true},
+                        {name: "Big Tasty Bacon", boolean: true},
+                        {name: "1,5 Liter Coca Cola", boolean: true},
+                        {name: "200 Gramm Lachs", boolean: false},
+                        {name: "9 Hot Wings von KFC", boolean: false},
+                        {name: "100 Gramm Rosinen", boolean: true},
+                        {name: "Eine Avocado", boolean: true},
+                        {name: "Xtra Long Chili Cheese Burger ", boolean: false}
                     ]
                 },
                 {statement: "Ich bin eine Ex von Ryan Gosling",
@@ -214,7 +215,7 @@ class WerLuegt extends Component {
     }
 
     nextStep() {
-        console.log(this.state.percentage)
+
         if(this.state.percentage === 100) this.setState({percentage: 0})
         this.setState({ percentage: this.state.percentage + 100 })
     }
@@ -225,22 +226,25 @@ class WerLuegt extends Component {
 
 
             var currRound = (this.state.currentRound) + 1;
-            if(currRound===1){
 
+            if(currRound===9){
+
+                this.props.handleEnd(this.state.points);
+
+            } else {
+
+
+                this.setState({
+                    currentRound: currRound,
+                    testWord: '',
+                    buzzingActive: false,
+                    buttonLabel: "START",
+                    showPoints: false,
+                    percentage: 0
+
+
+                })
             }
-
-            this.setState({
-                currentRound: currRound,
-                testWord: '',
-                buzzingActive: false,
-                buttonLabel: "START",
-                showPoints: false,
-                percentage: 0
-
-
-
-
-            })
         }else if(this.state.buttonLabel==='START'){
             var currentOption = 0;
             this.startTimer()
@@ -251,7 +255,7 @@ class WerLuegt extends Component {
                 buzzingActive: true,
                 currentOption: currentOption,
                 buzzerColor: 'aqua',
-                playStatus: Sound.status.PLAYING
+                playstatus: Sound.status.PLAYING
 
 
             })
@@ -319,8 +323,7 @@ class WerLuegt extends Component {
 
 
     handleKey = e => {
-        console.log(this.state.transition);
-        console.log(e.keyCode);
+
 
         if(e.keyCode===49 && this.state.buzzingPlayer ===0 && this.state.buzzingActive){
             this.buzzer.play();
@@ -349,7 +352,7 @@ class WerLuegt extends Component {
                     pointsOld: oldPoints,
                     points: points,
                     buttonLabel: "CHECK",
-                    playStatus: Sound.status.STOPPED
+                    playstatus: Sound.status.STOPPED
 
                 });
             }else {
@@ -373,7 +376,7 @@ class WerLuegt extends Component {
                     pointsOld: oldPoints,
                     points: points,
                     buttonLabel: "CHECK",
-                    playStatus: Sound.status.STOPPED
+                    playstatus: Sound.status.STOPPED
 
                 });
 
@@ -409,7 +412,7 @@ class WerLuegt extends Component {
                     pointsOld: oldPoints,
                     points: points,
                     buttonLabel: "CHECK",
-                    playStatus: Sound.status.STOPPED
+                    playstatus: Sound.status.STOPPED
 
                 });
             }else {
@@ -433,7 +436,7 @@ class WerLuegt extends Component {
                     pointsOld: oldPoints,
                     points: points,
                     buttonLabel: "CHECK",
-                    playStatus: Sound.status.STOPPED
+                    playstatus: Sound.status.STOPPED
 
                 });
 
@@ -467,7 +470,7 @@ class WerLuegt extends Component {
                     pointsOld: oldPoints,
                     points: points,
                     buttonLabel: "CHECK",
-                    playStatus: Sound.status.STOPPED
+                    playstatus: Sound.status.STOPPED
 
                 });
             }else {
@@ -491,7 +494,7 @@ class WerLuegt extends Component {
                     pointsOld: oldPoints,
                     points: points,
                     buttonLabel: "CHECK",
-                    playStatus: Sound.status.STOPPED
+                    playstatus: Sound.status.STOPPED
 
                 });
 
@@ -525,7 +528,7 @@ class WerLuegt extends Component {
                     pointsOld: oldPoints,
                     points: points,
                     buttonLabel: "CHECK",
-                    playStatus: Sound.status.STOPPED
+                    playstatus: Sound.status.STOPPED
 
                 });
             }else {
@@ -549,7 +552,7 @@ class WerLuegt extends Component {
                     pointsOld: oldPoints,
                     points: points,
                     buttonLabel: "CHECK",
-                    playStatus: Sound.status.STOPPED
+                    playstatus: Sound.status.STOPPED
 
                 });
 
@@ -624,7 +627,7 @@ class WerLuegt extends Component {
                     percentage: 100,
                     points: points,
                     pointsOld: oldPoints,
-                    playStatus: Sound.status.STOPPED
+                    playstatus: Sound.status.STOPPED
 
                 })
             }
@@ -632,8 +635,6 @@ class WerLuegt extends Component {
 
 
 
-
-        }else {
 
         }
 
@@ -653,20 +654,7 @@ class WerLuegt extends Component {
         if(this.state.currentRound===0){
 
             return(
-            <ReactCSSTransitionGroup
-                transitionName="example"
-                transitionAppear={true}
-                transitionLeave={false}
-                transitionAppearTimeout={2000}
-                transitionEnterTimeout={2000}
-                transitionLeaveTimeout={1}>
-
-
-                <img key={this.state.currentRound} src={start}
-                     style={{border: '10px solid #222'}}></img>
-
-
-            </ReactCSSTransitionGroup>
+                <ReactPlayer height="720px" width="1080" style={{marginTop: 50}} url={intro} playing />
             )
         }else {
 
@@ -767,9 +755,9 @@ class WerLuegt extends Component {
             <div style={{width: "99%"}}>
                 <Sound
                     url={backgroundMusic}
-                    playStatus={this.state.playStatus}
-                    volume={30}
-                    onFinishedPlaying={() => this.setState({ playStatus: Sound.status.STOPPED })}
+                    playStatus={this.state.playstatus}
+                    volume={70}
+                    onFinishedPlaying={() => this.setState({ playstatus: Sound.status.STOPPED })}
 
                 />
                 <audio ref={(buzzer) => { this.buzzer = buzzer}} src={buzzer}/>

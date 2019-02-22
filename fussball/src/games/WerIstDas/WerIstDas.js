@@ -8,7 +8,7 @@ import deadmau5 from "./deadmau5.jpg"
 import pewdiepie from "./pewdie.jpg"
 import mehrzad from "./mehrzad.jpg"
 import speedy from "./speedy.jpg"
-import hardy from "./hardy.jpg"
+import kygo from "./kygo.jpg"
 import doc from "./doc.jpg"
 import endSound from "./end-sound.mp3"
 import buzzer from "./buzzer.mp3"
@@ -19,7 +19,12 @@ import kim from "./kim.jpg"
 import carl from "./carl.jpg"
 import angela from "./angela.jpg"
 import karlsson from "./karlsson.jpg"
+import godoj from "./godoj.jpg"
+import rowling from "./rowling.jpg"
+import prinzessin from "./prinzessin.jpg"
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import ReactPlayer from 'react-player'
+import intro from './intro1.mp4'
 
 import '../../App.css';
 import {
@@ -35,6 +40,7 @@ import {
     Button
 
 } from 'reactstrap';
+import Sound from "react-sound";
 
 const ProgressBar = (props) => {
     return (
@@ -59,10 +65,11 @@ class WerIstDas extends React.Component {
 
         this.state = {
             playerList: this.props.playerList1,
-            roundList: [{name: "Start", image: start},{name: "Jeff Bezos", image: bezos}, {name: "Chesley Sullenberger", image: sully}, {name: "Annie Friesinger", image: annie},
-                        {name: "Joel Thomas Zimmerman aka Deadmau5", image: deadmau5}, {name: "Felix Kjellberg aka PewDiePie", image: pewdiepie}, {name: "Mehrzad Marashi", image: mehrzad}, {name: "Speedy Gonzales", image: speedy},
-                        {name: "Tom Hardy", image: hardy},{name: "Guy Beahm aka Dr. DisRespect", image: doc} ,{name: "Oscar Pistorius", image: oscar},{name: "Kim Dotcom", image: kim},
-                        {name: "Carl Johnson", image: carl}, {name: "Angela Anaconda", image: angela}, {name: "Karlsson vom Dach", image: karlsson}],
+            roundList: [{name: "Start", image: start},{name: "Jeff Bezos", image: bezos}, {name: "Chesley Sullenberger", image: sully}, {name: "Prinzessin Mononoke", image: prinzessin}, {name: "Annie Friesinger", image: annie},
+                        {name: "Joel Thomas Zimmerman aka Deadmau5", image: deadmau5}, {name: "Felix Kjellberg aka PewDiePie", image: pewdiepie}, {name: "Mehrzad Marashi", image: mehrzad}, {name: "Joanne K. Rowling", image: rowling},
+                        {name: "Speedy Gonzales", image: speedy}, {name: "Kyrre Gørvell-Dahll aka Kygo", image: kygo},
+                        {name: "Thomas Godoj", image: godoj},{name: "Guy Beahm aka Dr. DisRespect", image: doc} ,{name: "Oscar Pistorius", image: oscar},{name: "Kim Dotcom", image: kim},
+                        {name: "Carl Johnson", image: carl}, {name: "Karlsson vom Dach", image: karlsson}],
             time: {},
             seconds: 5,
             buzzingPlayer: 0,
@@ -78,7 +85,9 @@ class WerIstDas extends React.Component {
             points: [0,0,0,0],
             pointsOld: [0,0,0,0],
             showPoints: false,
-            buzzerColor: ''
+            buzzerColor: '',
+            playStatus: Sound.status.STOPPED,
+            playStatus2: Sound.status.STOPPED
 
 
 
@@ -143,7 +152,8 @@ class WerIstDas extends React.Component {
                 testWord: this.state.playerList[0].name,
                 buzzingActive: false,
                 transition: "width 5s ease-in",
-                buzzerColor: 'red'
+                buzzerColor: 'red',
+                playStatus2: Sound.status.STOPPED
 
             });
 
@@ -158,7 +168,8 @@ class WerIstDas extends React.Component {
                 testWord: this.state.playerList[1].name,
                 buzzingActive: false,
                 transition: "width 5s ease-in",
-                buzzerColor: 'blue'
+                buzzerColor: 'blue',
+                playStatus2: Sound.status.STOPPED
 
             });
 
@@ -171,7 +182,8 @@ class WerIstDas extends React.Component {
                 testWord: this.state.playerList[2].name,
                 buzzingActive: false,
                 transition: "width 5s ease-in",
-                buzzerColor: 'green'
+                buzzerColor: 'green',
+                playStatus2: Sound.status.STOPPED
 
             });
 
@@ -184,7 +196,8 @@ class WerIstDas extends React.Component {
                 testWord: this.state.playerList[3].name,
                 buzzingActive: false,
                 transition: "width 5s ease-in",
-                buzzerColor: 'yellow'
+                buzzerColor: 'yellow',
+                playStatus2: Sound.status.STOPPED
 
             });
 
@@ -264,17 +277,18 @@ class WerIstDas extends React.Component {
 
     renderImage(){
 
-        //<img key={this.state.currentRound} src={this.state.roundList[this.state.currentRound].image}></img>
-
-        if(!this.state.showPoints) {
+        if(this.state.currentRound === 0){
+        return(
+            <ReactPlayer volume="0.1" height="720px" width="1080" style={{marginTop: 50}} url={intro} playing/>
+        )}else if(!this.state.showPoints) {
             return (
 
                 <ReactCSSTransitionGroup
                     transitionName="example"
                     transitionAppear={true}
                     transitionLeave={false}
-                    transitionAppearTimeout={2000}
-                    transitionEnterTimeout={2000}
+                    transitionAppearTimeout={3000}
+                    transitionEnterTimeout={3000}
                     transitionLeaveTimeout={1}>
 
 
@@ -323,32 +337,36 @@ class WerIstDas extends React.Component {
     nextRound(){
 
         if(this.state.buttonLabel === 'START') {
-            this.newpic.play();
-            var currRound = (this.state.currentRound) + 1;
-            if(currRound===1){
-                this.backgroundMusic2.play();
+            if(this.state.currentRound +1 > 16){
+                this.props.handleEnd(this.state.points);
+            }else {
+
+                var currRound = (this.state.currentRound) + 1;
+                if (currRound === 1) {
+                    this.setState({
+                        playStatus: Sound.status.PLAYING
+                    })
+                }
+
+                this.setState({
+                    currentRound: currRound,
+                    testWord: "JETZT BUZZERN",
+                    buzzingActive: true,
+                    buttonLabel: "CHECK",
+                    showPoints: false,
+                    playStatus2: Sound.status.PLAYING
+
+
+                })
             }
-
-            this.setState({
-                currentRound: currRound,
-                testWord: "JETZT BUZZERN",
-                buzzingActive: true,
-                buttonLabel: "CHECK",
-                showPoints: false
-
-
-
-
-            })
         }else if(this.state.buttonLabel==='CHECK'){
             this.setState({
                 testWord: this.state.roundList[this.state.currentRound].name,
                 buttonLabel: 'RICHTIG',
                 rightButtonColor: 'green',
                 displayButton: '',
-                showTimer: 'hidden',
                 percentage: 0,
-                transition: "",
+                transition: 'none',
                 buzzingActive: false
 
             })
@@ -428,8 +446,21 @@ class WerIstDas extends React.Component {
                     <audio ref={(beep) => { this.beep = beep }} src={timer}/>
                     <audio ref={(endSound) => { this.endSound = endSound}} src={endSound}/>
                     <audio ref={(buzzer) => { this.buzzer = buzzer}} src={buzzer}/>
-                    <audio ref={(backgroundMusic2) => { this.backgroundMusic2 = backgroundMusic2}} src={backgroundMusic2}/>
-                    <audio ref={(newpic) => { this.newpic = newpic}} src={newpic}/>
+                    <Sound
+                        url={backgroundMusic2}
+                        playStatus={this.state.playStatus}
+                        volume={30}
+                        onFinishedPlaying={() => this.setState({ playStatus: Sound.status.STOPPED })}
+
+                    />
+                    <Sound
+                        url={newpic}
+                        playStatus={this.state.playStatus2}
+                        volume={30}
+                        onFinishedPlaying={() => this.setState({ playStatus2: Sound.status.STOPPED })}
+
+                    />
+
 
                     <Row style={{marginBottom:20, marginTop:20}}>
                         <Col sm="2">
